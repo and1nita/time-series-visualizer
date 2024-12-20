@@ -5,18 +5,20 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = None
+df = pd.read_csv('fcc-forum-pageviews.csv', index_col='date')
 
 # Clean data
-df = None
-
+df = df[(df['value'] >= df['value'].quantile(0.025)) & (df['value'] <= df['value'].quantile(0.975))]
+df.index = pd.to_datetime(df.index)
 
 def draw_line_plot():
     # Draw line plot
-
-
-
-
+    plt.rcParams.update({'font.size': 8})
+    fig, ax = plt.subplots(figsize=(12,3.8), dpi=200)
+    ax.set_title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Page Views')
+    ax.plot(df, color='tab:red', linewidth=1)
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
